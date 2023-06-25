@@ -86,9 +86,15 @@ El siguiente diagrama representa la adaptación hecha de Clean Architecture para
 ### Patrones y metodologías utilizadas:
 
 
-*  **Axios**: Para el consumo de servicios en la capa de Servicios Externos
+*  **Axios:** Para el consumo de servicios en la capa de Servicios Externos
 
-*  **Pruebas unitarias**: Se debe utilizar jest asi como react-testing-library
+*  **Pruebas unitarias:** Se debe utilizar jest asi como react-testing-library
+
+*  **ESLint:** En este proyecto se utiliza eslinter para la estandarización y verificación del código
+
+*  **Prettier:** De igual manera buscando establecer un estandar de legibilidad del código formateando un estilo en comun.
+
+*  **Husky:** Utilizando las virtudes, como pre-commits en el cual se ejecutan los comandos de eslint y prettier, para que antes de cada commit se le de formato con prettier y se valide el codigo que se trata de commitear con ESLint
 
 ### Tecnología CSS
 

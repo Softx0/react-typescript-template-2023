@@ -1,0 +1,50 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:jsx-a11y/recommended", 
+        "prettier"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "eslint-plugin-react-hooks",
+        "jsx-a11y",
+        "@typescript-eslint",
+        "prettier",
+        "eslint-plugin-react"
+    ],
+    "rules": {
+        "no-undef": 0,
+        "curly": "error",
+        "no-console": 1,
+        "react/prop-types": 0,
+        "semi": ["error", "always"],
+        "prettier/prettier": "error",
+        "no-inline-comments": "error",
+        "react-hooks/exhaustive-deps": 0,
+        "no-unused-vars": ["error", { "varsIgnorePattern": "_.*" }],
+        "jsx-a11y/img-redundant-alt": [ 2, {
+            "components": [ "Image" ],
+            "words": [ "Foto" ]
+          }],
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error"
+    }
+}

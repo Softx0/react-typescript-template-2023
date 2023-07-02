@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
-        "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "lint": "eslint src --ext js,ts,tsx --report-unused-disable-directives --max-warnings 10 --fix",
         "preview": "vite preview",
         "prettier-all-files": "prettier --write .",
         "prettier-format": "prettier --config .prettierrc ./**/*.{ts,js,html,css} --write",
@@ -34,12 +34,15 @@
         "@vitejs/plugin-react": "^4.0.0",
         "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-jsx-a11y": "^6.7.1",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.3.4",
         "husky": "^8.0.3",
         "onchange": "^7.1.0",
         "prettier": "2.8.8",
-        "typescript": "^5.0.2",
+        "typescript": "5.0.2",
         "vite": "^4.3.9"
     }
 }

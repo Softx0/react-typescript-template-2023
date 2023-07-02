@@ -1,1 +1,1 @@
-export { default as useFetchAndLoad } from './useFetchAndLoad';
+export {default as useFetchAndLoad} from './useFetchAndLoad';

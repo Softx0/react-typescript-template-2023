@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { User } from '../../domain';
+import {createSlice} from '@reduxjs/toolkit';
+import {User} from '../../domain';
 
 export const UserEmptyState: User = {
     name: '',
@@ -15,15 +15,15 @@ export const userSlice = createSlice({
     // se reemplaza no se modifica
     reducers: {
         createUser: (state, action) => {
-            return { ...state, ...action.payload };
+            return {...state, ...action.payload};
         },
         modifyUser: (state, action) => {
-            return { ...state, ...action.payload };
+            return {...state, ...action.payload};
         },
         resetUser: () => UserEmptyState,
     },
 });
 
-export const { createUser, modifyUser, resetUser } = userSlice.actions;
+export const {createUser, modifyUser, resetUser} = userSlice.actions;
 
 export default userSlice.reducer;

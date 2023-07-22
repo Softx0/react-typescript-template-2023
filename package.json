@@ -12,7 +12,8 @@
     "prettier-format": "prettier --config .prettierrc ./**/*.{ts,js,html,css} --write",
     "prettier-watch-windows": "onchange ./**/*.{ts,js} -- prettier --write {{changed}}",
     "prettier-watch-mac": "onchange \"**/*.{js,ts}\" -- prettier --write {{changed}}",
-    "lint-and-prettier": "lint-fix && prettier-all-files"
+    "lint-and-prettier": "yarn run prettier-all-files && yarn run lint-fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",

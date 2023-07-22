@@ -1,6 +1,6 @@
-import {AxiosResponse} from 'axios';
+import {AxiosResponse} from "axios";
 
 export interface AxiosCall<T> {
-    call: Promise<AxiosResponse<T>>;
-    controller?: AbortController;
+  call: Promise<AxiosResponse<T>>;
+  controller?: AbortController;
 }

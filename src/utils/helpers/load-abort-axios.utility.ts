@@ -1,4 +1,5 @@
 export const loadAbort = () => {
-    const controller = new AbortController();
-    return controller;
+  const controller = new AbortController();
+
+  return controller;
 };

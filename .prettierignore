@@ -1,3 +1,14 @@
 # Ignore artifacts:
 build
 coverage
+**/configs
+
+.eslintrc
+.prettierrc
+index.html
+package.json
+README.md
+src/vite-env.d.ts
+tsconfig.json
+tsconfig.node.json 
+vite.config.ts

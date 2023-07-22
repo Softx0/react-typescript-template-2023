@@ -1,41 +1,48 @@
-import {AxiosResponse} from 'axios';
-import {useEffect, useState} from 'react';
-import {AxiosCall} from '../domain';
+import {AxiosResponse} from "axios";
+import {useEffect, useState} from "react";
+import {AxiosCall} from "../domain";
 
 const useFetchAndLoad = () => {
-    const [loading, setLoading] = useState(false);
-    let controller: AbortController;
+  const [loading, setLoading] = useState(false);
+  let powerController: AbortController;
 
-    const callEndpoint = async (axiosCall: AxiosCall<any>) => {
-        if (axiosCall.controller) {
-            controller = axiosCall.controller;
-        }
-        setLoading(true);
-        let result = {} as AxiosResponse<any>;
+  const callEndpoint = async (axiosCall: AxiosCall<any>) => {
+    const {controller} = axiosCall;
 
-        try {
-            result = await axiosCall.call;
-        } catch (err: any) {
-            setLoading(false);
-            throw err;
-        }
+    if (controller) {
+      powerController = controller;
+    }
 
-        setLoading(false);
-        return result;
-    };
+    setLoading(true);
 
-    const cancelEndpoint = () => {
-        setLoading(false);
-        controller && controller.abort();
-    };
+    let result = {} as AxiosResponse<any>;
 
-    useEffect(() => {
-        return () => {
-            cancelEndpoint();
-        };
-    }, []);
+    try {
+      result = await axiosCall.call;
+    } catch (err: any) {
+      setLoading(false);
 
-    return {loading, callEndpoint};
+      throw err;
+    }
+
+    setLoading(false);
+
+    return result;
+  };
+
+  const cancelEndpoint = () => {
+    setLoading(false);
+    powerController && powerController.abort();
+  };
+
+  useEffect(
+    () => () => {
+      cancelEndpoint();
+    },
+    []
+  );
+
+  return {loading, callEndpoint};
 };
 
 export default useFetchAndLoad;

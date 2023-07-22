@@ -1,1 +1,1 @@
-export * from './axios-call.model';
+export * from "./axios-call.model";

@@ -1,12 +1,12 @@
-import {configureStore} from '@reduxjs/toolkit';
-import {userSlice} from './states/user';
+import {configureStore} from "@reduxjs/toolkit";
+import {userSlice} from "./states/user";
 
 export interface AppStore {
-    user: any;
+  user: any;
 }
 
 export default configureStore<AppStore>({
-    reducer: {
-        user: userSlice.reducer,
-    },
+  reducer: {
+    user: userSlice.reducer
+  }
 });

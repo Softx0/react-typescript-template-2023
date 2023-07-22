@@ -1,2 +1,2 @@
-export * from './states';
-export {default as store} from './store';
+export * from "./states";
+export {default as store} from "./store";

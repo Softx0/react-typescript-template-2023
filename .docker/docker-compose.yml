@@ -1,18 +1,24 @@
 version: "3.7"
 services:
   web:
-    image: IMAGE_NAME:$TAG_IMAGE
-    container_name: CONTAINER_NAME
+    image: node:alpine
+    container_name: react-template
+    entrypoint: /bin/sh
     build:
-      context: Dockerfile
+      context: ../Dockerfile
       target: $NODE_ENV
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 1G
     ports:
-      - ${PORT}:80
+      - 3000:3000
+    volumes:
+     - type: bind
+       source: ./
+       target: /srv/app
+    tty: true
     environment:
       VITE_REACT_APP_API_URL: ${!VITE_REACT_APP_API_URL}
       VITE_REACT_APP_API_KEY: ${!VITE_REACT_APP_API_KEY}

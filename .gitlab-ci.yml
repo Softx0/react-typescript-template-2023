@@ -13,10 +13,10 @@ before_script:
 build_env_develop:
   stage: build
   script:
-    - chmod +x ../setup_env.sh
-    - ../setup_env.sh DEV
+    - chmod +x ./setup_env.sh
+    - ./setup_env.sh DEV
 
-    - docker build -t IMAGE_NAME:$TAG_IMAGE_DEV -f ../.docker/Dockerfile .
+    - docker build -t IMAGE_NAME:$TAG_IMAGE_DEV -f Dockerfile .
   tags:
     - NAME-frontend-develop
   only:
@@ -29,7 +29,7 @@ deploy_env_develop:
   stage: deploy
   script:
     - docker push IMAGE_NAME:$TAG_IMAGE_DEV
-    - docker-compose -f ../.docker/docker-compose.yml up -d
+    - docker-compose -f .docker/docker-compose.yml up -d
   tags:
     - NAME-frontend-develop
   only:
@@ -39,11 +39,11 @@ deploy_env_develop:
 build_env_qa:
   stage: build
   script:
-    - chmod +x ../setup_env.sh
-    - ../setup_env.sh QA
+    - chmod +x ./setup_env.sh
+    - ./setup_env.sh QA
 
-    - docker build -t IMAGE_NAME:$TAG_IMAGE_QA -f ../.docker/Dockerfile .
-    - docker build -t IMAGE_NAME:$CI_COMMIT_SHORT_SHA -f ../.docker/Dockerfile .
+    - docker build -t IMAGE_NAME:$TAG_IMAGE_QA -f Dockerfile .
+    - docker build -t IMAGE_NAME:$CI_COMMIT_SHORT_SHA -f Dockerfile .
   tags:
     - NAME-frontend-qa
   only:
@@ -58,7 +58,7 @@ deploy_env_qa:
     - docker push IMAGE_NAME:$TAG_IMAGE_QA
     - docker push IMAGE_NAME:$CI_COMMIT_SHORT_SHA
 
-    - docker-compose -f ../.docker/docker-compose.yml up -d
+    - docker-compose -f .docker/docker-compose.yml up -d
   tags:
     - NAME-frontend-qa
   only:
@@ -68,11 +68,11 @@ deploy_env_qa:
 build_env_prod:
   stage: build
   script:
-    - chmod +x ../setup_env.sh
-    - ../setup_env.sh PROD
+    - chmod +x ./setup_env.sh
+    - ./setup_env.sh PROD
 
-    - docker build -t IMAGE_NAME:$TAG_IMAGE_PROD .
-    - docker build -t IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
+    - docker build -t IMAGE_NAME:$TAG_IMAGE_PROD -f Dockerfile .
+    - docker build -t IMAGE_NAME:$CI_COMMIT_SHORT_SHA -f Dockerfile .
   artifacts:
     expire_in: 1 hour
     paths:
@@ -91,7 +91,7 @@ deploy_env_prod:
     - docker push IMAGE_NAME:$TAG_IMAGE_PROD
     - docker push IMAGE_NAME:$CI_COMMIT_SHORT_SHA
 
-    - docker-compose -f ../.docker/docker-compose.yml up -d
+    - docker-compose -f .docker/docker-compose.yml up -d
   tags:
     - NAME-frontend-production
   only:

@@ -1,0 +1,98 @@
+variables:
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_PROJECT_NAME
+  GIT_STRATEGY: clone
+
+stages:
+  - build
+  - deploy
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+#### BUILD DEV ####
+build_env_develop:
+  stage: build
+  script:
+    - chmod +x ../setup_env.sh
+    - ../setup_env.sh DEV
+
+    - docker build -t IMAGE_NAME:$TAG_IMAGE_DEV -f ../.docker/Dockerfile .
+  tags:
+    - NAME-frontend-develop
+  only:
+    - develop
+
+#### DEPLOY DEV ####
+deploy_env_develop:
+  variables:
+    GIT_STRATEGY: none
+  stage: deploy
+  script:
+    - docker push IMAGE_NAME:$TAG_IMAGE_DEV
+    - docker-compose -f ../.docker/docker-compose.yml up -d
+  tags:
+    - NAME-frontend-develop
+  only:
+    - develop
+
+#### BUILD QA ####
+build_env_qa:
+  stage: build
+  script:
+    - chmod +x ../setup_env.sh
+    - ../setup_env.sh QA
+
+    - docker build -t IMAGE_NAME:$TAG_IMAGE_QA -f ../.docker/Dockerfile .
+    - docker build -t IMAGE_NAME:$CI_COMMIT_SHORT_SHA -f ../.docker/Dockerfile .
+  tags:
+    - NAME-frontend-qa
+  only:
+    - qa
+
+#### DEPLOY QA ####
+deploy_env_qa:
+  variables:
+    GIT_STRATEGY: none
+  stage: deploy
+  script:
+    - docker push IMAGE_NAME:$TAG_IMAGE_QA
+    - docker push IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+
+    - docker-compose -f ../.docker/docker-compose.yml up -d
+  tags:
+    - NAME-frontend-qa
+  only:
+    - qa
+
+#### BUILD PROD ####
+build_env_prod:
+  stage: build
+  script:
+    - chmod +x ../setup_env.sh
+    - ../setup_env.sh PROD
+
+    - docker build -t IMAGE_NAME:$TAG_IMAGE_PROD .
+    - docker build -t IMAGE_NAME:$CI_COMMIT_SHORT_SHA .
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - build
+  tags:
+    - NAME-frontend-production
+  only:
+    - main
+
+#### DEPLOY PROD ####
+deploy_env_prod:
+  variables:
+    GIT_STRATEGY: none
+  stage: deploy
+  script:
+    - docker push IMAGE_NAME:$TAG_IMAGE_PROD
+    - docker push IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+
+    - docker-compose -f ../.docker/docker-compose.yml up -d
+  tags:
+    - NAME-frontend-production
+  only:
+    - main

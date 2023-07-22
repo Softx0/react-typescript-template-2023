@@ -1,0 +1,16 @@
+node_modules
+**/dist
+**/build
+**/coverage
+*.css
+*.svg
+**/configs
+.eslintrc
+.prettierrc
+index.html
+package.json
+README.md
+src/vite-env.d.ts
+tsconfig.json
+tsconfig.node.json 
+vite.config.ts

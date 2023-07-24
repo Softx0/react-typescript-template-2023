@@ -1,24 +1,15 @@
-version: "3.7"
+version: "3.8"
 services:
-  web:
-    image: node:alpine
+  frontend:
+    image: react-template:dev
     container_name: react-template
-    entrypoint: /bin/sh
-    build:
-      context: ../Dockerfile
-      target: $NODE_ENV
     deploy:
       resources:
         limits:
           cpus: "1"
           memory: 1G
     ports:
-      - 3000:3000
-    volumes:
-     - type: bind
-       source: ./
-       target: /srv/app
-    tty: true
+      - "3000:80"
     environment:
-      VITE_REACT_APP_API_URL: ${!VITE_REACT_APP_API_URL}
-      VITE_REACT_APP_API_KEY: ${!VITE_REACT_APP_API_KEY}
+      VITE_REACT_APP_API_URL: https://rickandmortyapi.com/api/character/2
+      VITE_REACT_APP_API_KEY: 

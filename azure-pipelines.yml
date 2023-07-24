@@ -1,0 +1,112 @@
+trigger:
+  branches:
+    include:
+      - develop
+      - qa
+      - main
+
+pr: none
+
+pool:
+  vmImage: "ubuntu-latest"
+
+# Make sure to replace 'your-image-registry' with the name of your actual Azure Container Registry
+variables:
+  GIT_CLONE_PATH: "$(Build.SourcesDirectory)"
+  IMAGE_NAME: "your-image-registry.azurecr.io" # Replace 'your-image-registry' with your actual image registry name
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Build_Dev
+        displayName: "Build DEV"
+        steps:
+          - script: |
+              chmod +x ./setup_env.sh
+              ./setup_env.sh DEV
+              docker build -t $(IMAGE_NAME):$(TAG_IMAGE_DEV) -f .docker/Dockerfile .
+            displayName: "Build DEV environment"
+            pool:
+              name: NAME-frontend-develop # Replace 'NAME-frontend-develop' with your agent pool name
+          - script: docker login -u $(DOCKER_REGISTRY_USERNAME) -p $(DOCKER_REGISTRY_PASSWORD) your-image-registry.azurecr.io
+            displayName: "Docker login"
+
+          - script: docker push $(IMAGE_NAME):$(TAG_IMAGE_DEV)
+            displayName: "Push DEV image"
+
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+
+      - job: Build_QA
+        displayName: "Build QA"
+        steps:
+          - script: |
+              chmod +x ./setup_env.sh
+              ./setup_env.sh QA
+              docker build -t $(IMAGE_NAME):$(TAG_IMAGE_QA) -f .docker/Dockerfile .
+              docker build -t $(IMAGE_NAME):$(Build.SourceVersion) -f .docker/Dockerfile .
+            displayName: "Build QA environment"
+            pool:
+              name: NAME-frontend-qa # Replace 'NAME-frontend-qa' with your agent pool name
+          - script: docker login -u $(DOCKER_REGISTRY_USERNAME) -p $(DOCKER_REGISTRY_PASSWORD) your-image-registry.azurecr.io
+            displayName: "Docker login"
+
+          - script: |
+              docker push $(IMAGE_NAME):$(TAG_IMAGE_QA)
+              docker push $(IMAGE_NAME):$(Build.SourceVersion)
+            displayName: "Push QA images"
+
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/qa')
+
+      - job: Build_Prod
+        displayName: "Build PROD"
+        steps:
+          - script: |
+              chmod +x ./setup_env.sh
+              ./setup_env.sh PROD
+              docker build -t $(IMAGE_NAME):$(TAG_IMAGE_PROD) .
+              docker build -t $(IMAGE_NAME):$(Build.SourceVersion) .
+            displayName: "Build PROD environment"
+            pool:
+              name: NAME-frontend-production # Replace 'NAME-frontend-production' with your agent pool name
+          - script: docker login -u $(DOCKER_REGISTRY_USERNAME) -p $(DOCKER_REGISTRY_PASSWORD) your-image-registry.azurecr.io
+            displayName: "Docker login"
+
+          - script: |
+              docker push $(IMAGE_NAME):$(TAG_IMAGE_PROD)
+              docker push $(IMAGE_NAME):$(Build.SourceVersion)
+            displayName: "Push PROD images"
+
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+
+  - stage: Deploy
+    dependsOn: Build
+    jobs:
+      - job: Deploy_Dev
+        displayName: "Deploy DEV"
+        steps:
+          - script: |
+              docker-compose -f .docker/docker-compose.yml up -d
+            displayName: "Deploy DEV environment"
+            pool:
+              name: NAME-frontend-develop # Replace 'NAME-frontend-develop' with your agent pool name
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+
+      - job: Deploy_QA
+        displayName: "Deploy QA"
+        steps:
+          - script: |
+              docker-compose -f .docker/docker-compose.yml up -d
+            displayName: "Deploy QA environment"
+            pool:
+              name: NAME-frontend-qa # Replace 'NAME-frontend-qa' with your agent pool name
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/qa')
+
+      - job: Deploy_Prod
+        displayName: "Deploy PROD"
+        steps:
+          - script: |
+              docker-compose -f .docker/docker-compose.yml up -d
+            displayName: "Deploy PROD environment"
+            pool:
+              name: NAME-frontend-production # Replace 'NAME-frontend-production' with your agent pool name
+        condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')

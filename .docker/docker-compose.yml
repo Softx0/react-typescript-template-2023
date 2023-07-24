@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  frontend:
+    image: react-template:dev
+    container_name: react-template
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
+    ports:
+      - "3000:80"
+    environment:
+      VITE_REACT_APP_API_URL: https://rickandmortyapi.com/api/character/2
+      VITE_REACT_APP_API_KEY: 

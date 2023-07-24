@@ -12,3 +12,5 @@ src/vite-env.d.ts
 tsconfig.json
 tsconfig.node.json 
 vite.config.ts
+**/.docker/
+**/.husky/

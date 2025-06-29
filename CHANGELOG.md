@@ -229,5 +229,3 @@ Para migrar desde la versión anterior:
    - Usar nuevos componentes de UI
 
 ---
-
-**Todas las mejoras implementadas mantienen compatibilidad con Docker y CI/CD existentes.**

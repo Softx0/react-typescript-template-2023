@@ -1,103 +1,260 @@
-## React Boilerplate
+# React TypeScript Template 2024 🚀
 
-Proyecto con la estructura inicial para todos los proyectos basados en React.js + Typescript
+## 📋 Descripción
 
-## Que debo conocer antes de:
+Template moderno de React con TypeScript completamente configurado con las mejores prácticas de desarrollo. Incluye autenticación, rutas protegidas, sistema de inactividad, y arquitectura escalable siguiendo principios SOLID.
 
-### Tecnologias
+## ✨ Características Principales
 
-- ViteJS
-- React v18
-- Docker
-- ESLint
-- Prettier
-- Husky
-- Axios
+### 🔧 Tecnologías Core
+- **React 18** con TypeScript
+- **Vite** como build tool (más rápido que CRA)
+- **TailwindCSS** para estilos
+- **React Router DOM** para navegación
+- **Redux Toolkit** para estado global
+- **Context API** para autenticación
 
-### Setup
+### 🔐 Autenticación y Seguridad
+- Sistema de autenticación con JWT
+- Encriptación de tokens con CryptoJS
+- Rutas protegidas por roles
+- Hook de inactividad configurable
+- Logout automático por inactividad
 
-1. Clonar el repositorio
-2. Crear archivo `.env` con las variables especificadas en el `.env.sample`
-3. Para correrlo sin docker:
+### 📁 Arquitectura Escalable
+- Sistema de rutas organizadas por módulos (SOLID)
+- Lazy loading de componentes
+- Estructura de carpetas escalable
+- Servicios API centralizados
+- Hooks personalizados reutilizables
 
-   3.1. Situarse en la raiz del proyecto, proceder a instalar las dependencias con `yarn install`
+### 🛠️ Herramientas de Desarrollo
+- **ESLint** con configuración Airbnb
+- **Prettier** para formateo de código
+- **Husky** para git hooks
+- **Commitlint** para mensajes de commit
+- **Lint-staged** para linting automático
 
-   3.2. Ejecutar `yarn start`
+### 🐳 DevOps y Deploy
+- **Docker** con nginx para producción
+- **CI/CD** con Azure Pipelines y GitLab
+- Scripts de deploy automatizados
+- Configuración de variables de entorno
 
-4. Para correrlo con docker:
-   4.1. Construimos la imagen
-   ```
-   docker build -t IMAGE_NAME:$TAG_IMAGE_DEV -f Dockerfile .
-   ```
-   4.2. Procedemos a crear el container
-   ```
-   docker run -dp 3000:3000 --name PROJECT_NAME IMAGE_NAME:$TAG_IMAGE_DEV
-   ```
-5. Abrir el browser y dirigirse a `localhost:3000`
+## 🚀 Inicio Rápido
 
-### Consideraciones para el CI-CD
+### 1. Clonar e Instalar
+```bash
+git clone <tu-repo>
+cd react-typescript-template-2023
+npm install
+```
 
-Como se presenta en el `Dockerfile`, se debe tener en cuenta antes de emitir un lanzamiento hacia el CI se debe de con antelación crear el archivo yarn.lock localmente. Esto con el objetivo de optimizar el despliegue y liberación del proyecto en el servidor, así como también que el motivo es que a nivel del Dockerfile se esta utilizando el comando `yarn install --frozen-lockfile` buscando mejorar el rendimiento del pipeline.
+### 2. Variables de Entorno
+Crea un archivo `.env` basado en las siguientes variables:
+```bash
+# API Configuration
+VITE_API_BASE_URL=http://localhost:3001/api
+VITE_API_TIMEOUT=10000
 
-## Arquitectura
+# JWT Configuration
+VITE_JWT_SECRET=your-jwt-secret-key
+VITE_JWT_EXPIRES_IN=24h
 
-### Clean Architecture
+# Feature Flags
+VITE_ENABLE_INACTIVITY_TIMER=true
+VITE_DEFAULT_INACTIVITY_TIME=300000
 
-En _Clean Architecture_, una aplicación se divide en responsabilidades y cada una de estas responsabilidades se representa en forma de capa.
+# Environment
+VITE_ENVIRONMENT=development
+```
 
-Se basa en que la capa de dominio (Models/State) no dependa de ninguna capa exterior.
-La de aplicación sólo depende de la de dominio y el resto (normalmente presentación y acceso a datos) depende de la capa de aplicación.
-Esto se logra con la implementación de interfaces que luego tendrán que implementar las capas externas mediante la inyección de dependencias.
+### 3. Iniciar Desarrollo
+```bash
+npm run dev
+# o
+npm start
+```
 
-El siguiente diagrama representa la adaptación hecha de Clean Architecture para un proyecto Frontend basado en Typescrit y React
+### 4. Build para Producción
+```bash
+npm run build
+```
+
+## 📱 Uso de la Aplicación
+
+### Login
+- Usa cualquier email y contraseña para la demo
+- Automáticamente se generará un JWT mock
+- Redirección automática al dashboard
+
+### Dashboard
+- Área protegida que requiere autenticación
+- Logout manual o automático por inactividad
+- Interfaz moderna con TailwindCSS
+
+## 📁 Estructura del Proyecto
+
+```
+src/
+├── components/          # Componentes reutilizables
+│   ├── routing/        # Componentes de enrutamiento
+│   │   ├── ProtectedRoute.tsx
+│   │   ├── InactivityWrapper.tsx
+│   │   └── RouteRenderer.tsx
+├── context/            # Context API providers
+│   ├── AuthContext.tsx
+│   ├── BaseContext.tsx
+│   └── index.ts
+├── hooks/              # Custom hooks
+│   ├── useAsync.ts
+│   ├── useInactivityTimer.ts
+│   └── index.ts
+├── pages/              # Páginas de la aplicación
+│   ├── Login/
+│   └── Dashboard/
+├── routes/             # Sistema de rutas escalable
+│   ├── types/
+│   ├── routeConfigs/   # Configuraciones por módulo
+│   └── allRoutes.ts    # Consolidador de rutas
+├── services/           # Servicios de API
+│   ├── api/
+│   │   └── axiosConfig.ts
+│   └── authService.ts
+├── types/              # Definiciones TypeScript
+├── utils/              # Utilidades
+│   ├── encryption.ts
+│   ├── jwt.ts
+│   └── apiHelpers.ts
+├── config/             # Configuraciones
+│   └── env.ts
+└── redux/              # Estado global (Redux)
+```
+
+## 🔧 Scripts Disponibles
+
+### Desarrollo
+```bash
+npm run dev          # Iniciar servidor de desarrollo
+npm run build        # Build para producción
+npm run preview      # Preview del build
+```
+
+### Calidad de Código
+```bash
+npm run lint         # Ejecutar ESLint
+npm run lint:fix     # Corregir errores automáticamente
+npm run format       # Formatear código con Prettier
+npm run type-check   # Verificar tipos TypeScript
+```
+
+### Testing
+```bash
+npm run test         # Ejecutar tests
+npm run test:coverage # Tests con coverage
+```
+
+## 🎯 Características Avanzadas
+
+### Sistema de Rutas Escalable
+- Configuración modular de rutas
+- Lazy loading automático
+- Metadata para SEO
+- Timeouts de inactividad por ruta
+
+### Gestión de Estado Híbrida
+- Redux Toolkit para estado global
+- Context API para autenticación
+- Hooks personalizados para lógica reutilizable
+
+### Seguridad
+- JWT con encriptación AES
+- Validación de tokens
+- Refresh tokens automático
+- Logout por inactividad
+
+### Desarrollo
+- Hot reload con Vite
+- Type checking en tiempo real
+- Git hooks automatizados
+- Mensajes de commit estandarizados
+
+## 🐳 Docker
+
+### Desarrollo
+```bash
+docker build -t react-app .
+docker run -p 3000:80 react-app
+```
+
+### Producción
+El template incluye configuración completa de Docker con nginx optimizado para producción.
+
+## 🔄 CI/CD
+
+Incluye configuración para:
+- **Azure Pipelines** (`azure-pipelines.yml`)
+- **GitLab CI** (`.gitlab-ci.yml`)
+- **GitHub Actions** (opcional)
+
+## 📚 Clean Architecture
+
+### Arquitectura Implementada
+
+El proyecto sigue los principios de Clean Architecture adaptados para React:
 
 ![CleanArchitectureReact](https://user-images.githubusercontent.com/32858351/173492130-2400f1b6-0262-4214-86c8-2733a5219f57.svg)
 
 ### Capas
 
-- **Servicios Externos:** es la capa que contiene los servicios que conectan el dominio con el mundo exterior (capas exteriores). Aquí se definen los contratos, interfaces destinados a consumir los servicios externos.
+- **Servicios Externos:** Conectan el dominio con APIs externas
+  - `services/`: Configuración de Axios y servicios HTTP
+  - `api/`: Cliente HTTP centralizado
 
-  - **services**: todos aquellos lugares donde vamos a estar llamando para buscar la información
+- **Adaptadores:** Estandarización de datos
+  - `adapters/`: Transformación de datos entre capas
+  - `utils/`: Utilidades de manejo de APIs
 
-- **Adaptadores:** es la capa de estandarización datos. Implementa interfaces definida en la capa de Servicios Externos y estandariza los responses de los servicios externos buscando llevar a la aplicación la menor cantidad errores humanos.
+- **Componentes:** Lógica de negocio y presentación
+  - `components/`: Componentes reutilizables
+  - `hooks/`: Custom hooks
+  - `routes/`: Sistema de enrutamiento
+  - `pages/`: Páginas de la aplicación
 
-  - **adapters**: estandarizar en base al modelo y el endpoint de momento. Reciben informacion y la devuelven.
-  - **interceptors**: se busca en base a los adapters adaptar lo que enviamos y lo que recibimos (usalmente se utiliza axios como estandar)
+- **Models/State:** Corazón de la aplicación
+  - `types/`: Interfaces y modelos TypeScript
+  - `context/`: Estado local con Context API
+  - `redux/`: Estado global con Redux Toolkit
 
-- **Componentes:** Aqui se define toda la logica de negocio, mediante los components como tal, los hooks, utilities entre otros...
+## 📚 Guías de Uso
 
-  - **components**: logica de negocio / componentes estilizados
-  - **hooks**: custom hooks que sean reutilizables en un segmento o toda la aplicación, para controlar su ciclo de vida.
-  - **routes**: definir las rutas de la aplicación y sus conexiones
-  - **utilities**: porciones de logica reutilizables en la aplicacion
-  - **assets**: estilos, fonts, recursos graficos, entre otros.
+### Agregar Nueva Ruta
+1. Crear el componente en `src/pages/`
+2. Agregar configuración en `src/routes/routeConfigs/`
+3. Importar en `src/routes/allRoutes.ts`
 
-- **Models/State:** es el corazon de la aplicación y tiene que estar totalmente aislada de cualquier dependencia ajena a la lógica o los datos de negocio. Puede contener entidades, value objects, eventos y servicios del dominio. Representan el state y el state en sí.
+### Crear Nuevo Hook
+1. Crear archivo en `src/hooks/`
+2. Exportar en `src/hooks/index.ts`
+3. Usar en componentes
 
-  - **types/interfaces/models**: dar la representacion de nuestras entidades, y estandarizar un contrato sobre lo que se utilizara.
-  - **context**: cualquier recurso que se necesite para manejar el state dentro de un alcance definido y que no sera necesario en toda la aplicación en todo momento.
-  - **redux**: información que se necesita en toda la aplicación en todo momento.
+### Agregar Nuevo Servicio
+1. Crear archivo en `src/services/`
+2. Usar el cliente Axios configurado
+3. Manejar errores correctamente
 
-### Patrones y metodologías utilizadas:
+## 🤝 Contribuir
 
-- **Axios:** Para el consumo de servicios en la capa de Servicios Externos
+1. Fork el proyecto
+2. Crear rama feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Commit con formato (`git commit -m 'feat: agregar nueva funcionalidad'`)
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+5. Crear Pull Request
 
-- **Pruebas unitarias:** Se debe utilizar jest asi como react-testing-library
+## 📄 Licencia
 
-- **ESLint:** En este proyecto se utiliza eslinter para la estandarización y verificación del código
+Este proyecto está bajo la Licencia MIT.
 
-- **Prettier:** De igual manera buscando establecer un estandar de legibilidad del código formateando un estilo en comun.
+---
 
-- **Husky:** Utilizando las virtudes, como pre-commits en el cual se ejecutan los comandos de eslint y prettier, para que antes de cada commit se le de formato con prettier y se valide el codigo que se trata de commitear con ESLint
-
-### Tecnología CSS
-
-**Importante:** Hasta ahora no se ajustara el template a una tecnologias de css en especifica, con el objetivo de que cada quien al utilizar el template pueda configurar e instalar la tecnologia que le guste
-
-#### Opciones recomendadas:
-
-- **TaildWindCSS**
-- **StyledComponents**
-- **Emotion**
-- **Bootstrap**
-- **AntDesign**
+**Hecho con ❤️ para la comunidad de desarrolladores**

@@ -5,13 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint-fix": "eslint src --ext js,ts,tsx,jsx --report-unused-disable-directives --max-warnings 10 --fix",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint src --ext js,ts,tsx,jsx --report-unused-disable-directives --max-warnings 10",
+    "lint:fix": "eslint src --ext js,ts,tsx,jsx --report-unused-disable-directives --max-warnings 10 --fix",
+    "format": "prettier --write src/**/*.{ts,tsx,json,css,md}",
     "prettier-format": "prettier --write .",
     "prettier-watch-windows": "onchange ./**/*.{ts,js,tsx,jsx} -- prettier --write {{changed}}",
     "prettier-watch-mac": "onchange \"**/*.{js,ts,tsx,jsx}\" -- prettier --write {{changed}}",
-    "lint-and-prettier": "yarn run prettier-format && yarn run lint-fix",
+    "lint-and-prettier": "npm run prettier-format && npm run lint:fix",
+    "type-check": "tsc --noEmit",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -23,10 +29,13 @@
     "react-router-dom": "^6.14.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@testing-library/dom": "^9.3.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^29.5.2",
     "@types/node": "^20.3.1",
     "@types/react": "^18.2.16",
@@ -35,6 +44,8 @@
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.21",
+    "crypto-js": "^4.2.0",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-json": "^3.1.0",
@@ -46,8 +57,19 @@
     "eslint-plugin-react-refresh": "^0.3.4",
     "husky": "^8.0.3",
     "onchange": "^7.1.0",
+    "postcss": "^8.5.6",
     "prettier": "2.8.8",
+    "tailwindcss": "^3.4.17",
     "typescript": "5.0.2",
     "vite": "^4.3.9"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "src/**/*.{json,css,scss,md}": [
+      "prettier --write"
+    ]
   }
 }

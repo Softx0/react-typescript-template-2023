@@ -14,9 +14,70 @@ pool:
 variables:
   GIT_CLONE_PATH: "$(Build.SourcesDirectory)"
   IMAGE_NAME: "your-image-registry.azurecr.io" # Replace 'your-image-registry' with your actual image registry name
+  NODE_VERSION: "18.x"
 
 stages:
+  - stage: QualityGate
+    displayName: "Quality Gate & Testing"
+    jobs:
+      - job: CodeQuality
+        displayName: "Code Quality Checks"
+        steps:
+          - task: NodeTool@0
+            displayName: "Setup Node.js"
+            inputs:
+              versionSpec: "$(NODE_VERSION)"
+
+          - script: |
+              echo "📦 Installing dependencies..."
+              npm ci
+            displayName: "Install Dependencies"
+
+          - script: |
+              echo "🔍 Running TypeScript type checking..."
+              npm run type-check
+            displayName: "TypeScript Type Check"
+
+          - script: |
+              echo "🧹 Running ESLint..."
+              npm run lint
+            displayName: "ESLint Check"
+
+          - script: |
+              echo "🎨 Checking code formatting..."
+              npm run format
+            displayName: "Prettier Format Check"
+
+          - script: |
+              echo "🧪 Running tests..."
+              npm run test:coverage
+            displayName: "Run Tests with Coverage"
+            continueOnError: true
+
+          - script: |
+              echo "🏗️ Building application..."
+              npm run build
+            displayName: "Build Application"
+
+          - task: PublishTestResults@2
+            displayName: "Publish Test Results"
+            inputs:
+              testResultsFormat: "JUnit"
+              testResultsFiles: "coverage/junit.xml"
+              mergeTestResults: true
+            condition: succeededOrFailed()
+
+          - task: PublishCodeCoverageResults@1
+            displayName: "Publish Code Coverage"
+            inputs:
+              codeCoverageTool: "Cobertura"
+              summaryFileLocation: "coverage/cobertura-coverage.xml"
+            condition: succeededOrFailed()
+
   - stage: Build
+    displayName: "Build & Push Images"
+    dependsOn: QualityGate
+    condition: succeeded()
     jobs:
       - job: Build_Dev
         displayName: "Build DEV"
